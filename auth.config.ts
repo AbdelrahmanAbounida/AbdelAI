@@ -7,6 +7,7 @@ import { LoginSchema } from "./schemas/auth-schemas";
 import { getUserByEmail } from "./actions/user/get-user";
 
 export default {
+  // secret: process.env.AUTH_SECRET,
   providers: [
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,

@@ -1,9 +1,8 @@
 import NextAuth, { DefaultSession } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import { prismadb } from "./lib/db";
 import { getUserById } from "./actions/user/get-user";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
+import { PrismaAdapter } from "@auth/prisma-adapter"; // u can import from @next-auth/prisma-adapter
 
 declare module "next-auth" {
   interface Session {
@@ -12,6 +11,8 @@ declare module "next-auth" {
     };
   }
 }
+// @prisma/client@5.14.0, prisma 5.14.0, next-auth@5.0.0-beta.15
+// https://github.com/nextauthjs/next-auth/issues/6106
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -19,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/login",
     signOut: "/login",
   },
-  secret: process.env.AUTH_SECRET,
+
   events: {
     async linkAccount({ user }) {
       await prismadb.user.update({
@@ -60,7 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-  adapter: PrismaAdapter(prismadb),
+  adapter: PrismaAdapter(prismadb) as any,
   session: { strategy: "jwt" },
   ...authConfig,
 });
