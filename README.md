@@ -4,7 +4,7 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?logo=react&logoColor=%2361DAFB)
 ![Tailwind CSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?logo=tailwind-css&logoColor=white)
 ![Prisma ORM](https://img.shields.io/badge/Prisma%20ORM-2D3748?logo=prisma&logoColor=whitelabelColor=2D3748)
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-%234ea94b.svg?logo=mysql&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-%23635bfe.svg?logo=stripe&logoColor=white)
 ![NextAuth.js](https://img.shields.io/badge/NextAuth.js-000000?logo=next.js&logoColor=whitelabelColor=000000)
 ![SWR](https://img.shields.io/badge/SWR-FF6347?logo=vercel&logoColor=whitelabelColor=FF6347)
@@ -28,7 +28,7 @@ a SAAS AI Platform for text, image, video, music and code generation
 
 ```
 NODE_ENV="development"
-DATABASE_URL="mongodb+srv://<username>:<password>@<cluster>/<database>"
+DATABASE_URL=
 AUTH_SECRET=<your_auth_secret_key>
 
 # Auth Providers
@@ -37,11 +37,6 @@ GITHUB_CLIENT_SECRET=<your_github_client_secret>
 GOOGLE_CLIENT_ID=<your_google_client_id>
 GOOGLE_CLIENT_SECRET=<your_google_client_secret>
 
-# AWS S3
-AWS_BUCKET_REGIONN=
-AWS_S3_ACCESS_KEY=
-AWS_SECRET_ACCESS_KEY=
-AWS_BUCKET_NAMEE=
 
 # App URLs
 NEXT_PUBLIC_APP_MAIN_URL=<your_app_main_url>
