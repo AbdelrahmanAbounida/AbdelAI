@@ -7,7 +7,7 @@ import { LoginSchema } from "./schemas/auth-schemas";
 import { getUserByEmail } from "./actions/user/get-user";
 
 export default {
-  // secret: process.env.AUTH_SECRET,
+  //
   providers: [
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -40,7 +40,7 @@ export default {
 
           const resp = await getUserByEmail({ email });
           const user = resp?.details;
-          if (!user || !user.password) {
+          if (!user || !user.hashedPassword) {
             return null;
           }
           // check if password matches
@@ -48,9 +48,11 @@ export default {
             password,
             user.hashedPassword
           );
+
           if (validPassword) {
             return user;
           }
+          console.log({ validPassword });
         }
         return null;
       },

@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // check if email is verified
       const resp = await getUserById({ id: user?.id! });
       const existuser = resp?.details && !resp.error;
+      console.log({ existuser });
       if (!existuser) return false;
 
       return true;
@@ -47,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const resp = await getUserById({ id: token.sub });
       const user = resp?.details;
-      if (!resp?.error || !user) return token;
+      if (resp?.error || !user) return token;
 
       token.isauth = !!(account?.provider !== "credentials");
       token.id = user.id;
@@ -63,5 +64,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   adapter: PrismaAdapter(prismadb) as any,
   session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
   ...authConfig,
 });

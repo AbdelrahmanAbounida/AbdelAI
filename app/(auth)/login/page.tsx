@@ -1,92 +1,129 @@
+"use client";
 import Logo from "@/components/logo";
-import React from "react";
+import React, { useState } from "react";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { LoginSchema } from "@/schemas/auth-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/actions/auth/login";
 
 const Login = () => {
+  const [loginLoading, setloginLoading] = useState(false);
+  const router = useRouter();
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleLogin = async (values: z.infer<typeof LoginSchema>) => {
+    try {
+      setloginLoading(true);
+      const resp = await loginUser({ ...values });
+      if (resp.error) {
+        toast.error(resp?.details);
+      } else {
+        toast.success("User Logedin successfully");
+      }
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setloginLoading(false);
+    }
+  };
   return (
     <div className="flex bg-white rounded-[20px] flex-1 max-w-lg p-4  flex-col justify-center  lg:px-8  ">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm pt-5">
-        {/* <img
-          className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          alt="Your Company"
-        /> */}
         <Logo />
-
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          Create new account
         </h2>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium leading-6 text-gray-900">
+                  Email
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    placeholder="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block text-sm font-medium leading-6 text-gray-900">
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    placeholder="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {loginLoading ? (
+            <Button
+              className="bg-indigo-400 flex w-full justify-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+              disabled
             >
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-              {/* <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot password?
-                </a>
-              </div> */}
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Loading...
+            </Button>
+          ) : (
+            <Button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign in
-            </button>
-          </div>
+            </Button>
+          )}
         </form>
-
-        <p className="mt-10 text-center text-sm text-gray-500 pb-10">
-          Not a member?{" "}
-          <a
-            href="/register"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 underline"
-          >
-            Create account
-          </a>
-        </p>
-      </div>
+      </Form>
+      <p className="mt-7 text-center text-sm text-gray-500 pb-7">
+        Not a member?
+        <a
+          href="/register"
+          className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 underline"
+        >
+          Create account
+        </a>
+      </p>
     </div>
   );
 };
