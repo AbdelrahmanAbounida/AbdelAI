@@ -18,8 +18,8 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ item, ...props }) => {
     <Link
       href={item.link}
       className={cn(
-        "w-full p-3 rounded-md gap-2 items-center flex hover:bg-[#2A2F3A] text-[#9396A2] hover:text-white/80",
-        currentPath == item.link && "bg-zinc-700 text-white",
+        "w-full p-3 rounded-md gap-2 items-center flex hover:bg-[#2A2F3A] dark:hover:bg-slate-900 text-[#9396A2] hover:text-white/80",
+        currentPath == item.link && "bg-[#2A2F3A] dark:bg-slate-900 text-white",
         props.className
       )}
     >

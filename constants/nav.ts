@@ -6,7 +6,9 @@ export interface SideNavItemProps {
   icon: keyof typeof Icons;
   color: string;
   bgColor: string;
+  darkBgColor: string;
   link: string;
+  description?: string;
 }
 
 export const SidebarItems: SideNavItemProps[] = [
@@ -16,6 +18,7 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#4396C7",
     link: "/dashboard",
     bgColor: "",
+    darkBgColor: "#1a1a1a",
   },
   {
     title: "Conversation",
@@ -23,6 +26,7 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#765BCA",
     link: "/conversation",
     bgColor: "#F5EDFF",
+    darkBgColor: "#2B1B37",
   },
   {
     title: "Image Generation",
@@ -30,6 +34,8 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#931F51",
     link: "/image",
     bgColor: "#F8E7EE",
+    darkBgColor: "#3B1B2B",
+    description: "Turn your prompt into an image.",
   },
   {
     title: "Video Generation",
@@ -37,6 +43,7 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#B0391A",
     link: "/video",
     bgColor: "#F9EBE6",
+    darkBgColor: "#3B1B1B",
   },
   {
     title: "Music Generation",
@@ -44,6 +51,7 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#40A783",
     link: "/music",
     bgColor: "#E6F8F4",
+    darkBgColor: "#1B3B3B",
   },
   {
     title: "Code Generation",
@@ -51,6 +59,7 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#2F6949",
     link: "/code",
     bgColor: "#E8F1EC",
+    darkBgColor: "#1B2B2B",
   },
   {
     title: "Settings",
@@ -58,5 +67,6 @@ export const SidebarItems: SideNavItemProps[] = [
     color: "#9294A0",
     link: "/settings",
     bgColor: "",
+    darkBgColor: "#1a1a1a",
   },
 ];
