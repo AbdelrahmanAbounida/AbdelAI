@@ -22,7 +22,6 @@ import { loginUser } from "@/actions/auth/login";
 
 const Login = () => {
   const [loginLoading, setloginLoading] = useState(false);
-  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
