@@ -19,6 +19,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/actions/auth/login";
+import SocialButtons from "../_components/social-buttons";
 
 const Login = () => {
   const [loginLoading, setloginLoading] = useState(false);
@@ -114,6 +115,15 @@ const Login = () => {
           )}
         </form>
       </Form>
+
+      <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300 dark:before:border-neutral-500 dark:after:border-neutral-500">
+        <p className="mx-4 mb-0 text-center font-semibold dark:text-neutral-200">
+          OR
+        </p>
+      </div>
+
+      <SocialButtons />
+
       <p className="mt-7 text-center text-sm text-gray-500 pb-7">
         Not a member?
         <a

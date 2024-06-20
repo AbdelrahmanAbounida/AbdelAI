@@ -9,23 +9,23 @@ datasource db {
 
 
 model User {
-  id            String          @id @default(cuid())
+  id      Int      @id @default(autoincrement())
   name          String?
   username      String?         @unique
   email         String         @unique
-  hashedPassword String
+  hashedPassword String?
   emailVerified DateTime?
   image         String?
   Session       Session[]
   Account       Account?
- 
+  totalTokens   Int @default(35) // u need 33 to try all services
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Account {
-  id                       String  @id @default(cuid())
-  userId                   String  @unique
+  id      Int      @id @default(autoincrement())
+  userId                   Int  @unique
   type                     String
   provider                 String
   providerAccountId        String
@@ -47,9 +47,9 @@ model Account {
 }
  
  model Session {
-  id           String   @id @default(cuid())
+  id      Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
  
@@ -60,9 +60,31 @@ model Account {
 }
 
 model VerificationToken {
+  id      Int      @id @default(autoincrement())
   identifier String
   token      String
   expires    DateTime
  
   @@unique([identifier, token])
+}
+
+// track token usage 
+model TokenLimit {
+  id      Int      @id @default(autoincrement())
+  count   Int 
+  userId Int @unique 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// :TODO:: handle stripe modals 
+
+model UserSubscription{
+  id           String   @id @default(cuid())
+  userId      Int  @unique
+  stripeCustomerId Int @unique 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
