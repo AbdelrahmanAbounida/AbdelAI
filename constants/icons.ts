@@ -16,5 +16,5 @@ export const Icons: { [key: string]: LucideIcon } = {
   music: Music,
   code: Code,
   chat: MessageSquare,
-  setting: Settings,
+  setting: Settings, //Settings,
 };

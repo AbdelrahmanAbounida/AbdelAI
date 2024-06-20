@@ -20,13 +20,13 @@ const Toggletheme = () => {
   }, []);
 
   if (!isMounted) {
-    return <Skeleton className="w-[40px] h-[40px] rounded-md" />;
+    return <Skeleton className="w-[40px] h-[40px] rounded-full" />;
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant={"outline"}>
+      <DropdownMenuTrigger className="focus:outline-none">
+        <Button variant={"ghost"} className="h-[40px] w-[40px]" size={"icon"}>
           <SunIcon className="dark:scale-0 rotate-0 scale-100 transition-all dark:-rotate-90 " />
           <MoonIcon className="scale-0 dark:scale-100 rotate-90 dark:rotate-0 absolute transition-all " />
           <span className="sr-only">Toggle Theme</span>
