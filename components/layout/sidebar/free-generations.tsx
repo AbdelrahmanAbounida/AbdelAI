@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
+import UpgradeButton from "@/components/upgrade-button";
 
 const FreeGenerations = () => {
   const currentGenerations = 2;
@@ -20,11 +21,7 @@ const FreeGenerations = () => {
           value={(currentGenerations * 100) / MAX_NUM_GENERATIONS}
         />
 
-        {/** TODO: Upgrad efunctionality */}
-        <Button className="hover:opacity-100 dark:text-white opacity-95 w-full mt-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-          Upgrade
-          <Zap className="ml-2 h-4 w-4" />
-        </Button>
+        <UpgradeButton />
       </div>
     </div>
   );

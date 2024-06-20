@@ -13,7 +13,7 @@ export interface SideNavItemProps {
 
 export const SidebarItems: SideNavItemProps[] = [
   {
-    title: "Dashboard",
+    title: "Home",
     icon: "dashboard",
     color: "#4396C7",
     link: "/dashboard",

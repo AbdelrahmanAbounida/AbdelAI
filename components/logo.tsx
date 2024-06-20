@@ -1,8 +1,12 @@
+import Link from "next/link";
 import React from "react";
 
 const Logo = () => {
   return (
-    <div className="flex items-center gap-2 mx-auto w-full  justify-center">
+    <Link
+      href="/"
+      className="flex items-center gap-2 mx-auto w-full  justify-center"
+    >
       <img
         width={50}
         className=""
@@ -10,7 +14,7 @@ const Logo = () => {
         alt="Your Company"
       />
       <div className="text-2xl font-bold text-indigo-600">AbdelAI</div>
-    </div>
+    </Link>
   );
 };
 

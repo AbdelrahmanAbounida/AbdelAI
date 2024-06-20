@@ -11,6 +11,10 @@ const PageHeader = () => {
   const navItem = SidebarItems.find((item) => item.link == currentPath);
   const Icon = navItem?.icon ? Icons[navItem?.icon] : null;
 
+  if (currentPath == "/dashboard") {
+    return;
+  }
+
   return (
     <div className="flex items-center gap-3  ">
       {Icon && (

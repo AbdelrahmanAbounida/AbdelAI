@@ -20,7 +20,6 @@ const Dashboard = () => {
       <div className="flex flex-col gap-2 max-w-4xl mx-auto w-full mt-4">
         {SidebarItems.slice(1, SidebarItems.length - 1).map((item, index) => {
           const Icon = Icons[item.icon];
-          console.log(item.bgColor);
           return (
             <Link
               href={item.link}
