@@ -27,6 +27,7 @@ export const SidebarItems: SideNavItemProps[] = [
     link: "/conversation",
     bgColor: "#F5EDFF",
     darkBgColor: "#2B1B37",
+    description: "Our most advanced conversation model",
   },
   {
     title: "Image Generation",
@@ -44,6 +45,7 @@ export const SidebarItems: SideNavItemProps[] = [
     link: "/video",
     bgColor: "#F9EBE6",
     darkBgColor: "#3B1B1B",
+    description: "Turn your prompt into a video",
   },
   {
     title: "Music Generation",
@@ -52,6 +54,7 @@ export const SidebarItems: SideNavItemProps[] = [
     link: "/music",
     bgColor: "#E6F8F4",
     darkBgColor: "#1B3B3B",
+    description: "Turn your prompt into music",
   },
   {
     title: "Code Generation",
@@ -60,6 +63,7 @@ export const SidebarItems: SideNavItemProps[] = [
     link: "/code",
     bgColor: "#E8F1EC",
     darkBgColor: "#1B2B2B",
+    description: "Turn your prompt into code",
   },
   {
     title: "Settings",

@@ -12,7 +12,7 @@ const PageHeader = () => {
   const Icon = navItem?.icon ? Icons[navItem?.icon] : null;
 
   return (
-    <div className="flex items-center gap-3 p-4 ">
+    <div className="flex items-center gap-3  ">
       {Icon && (
         <div
           style={{
@@ -24,7 +24,7 @@ const PageHeader = () => {
           <Icon color={navItem?.color} size={50} />
         </div>
       )}
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col gap-0 items-start justify-center mt-1">
         <span className="text-3xl font-bold ">{navItem?.title}</span>
         <span className="text-md text-zinc-500">{navItem?.description}</span>
       </div>

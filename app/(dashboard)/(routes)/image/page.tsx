@@ -58,19 +58,21 @@ const ImageGeneration = () => {
 
   function onSubmit(data: z.infer<typeof ImageFormSchema>) {
     console.log({ data });
+
+    {
+      /** ::TODO :: handle image generation and update db table  */
+    }
   }
 
   return (
     <div>
       <div className="flex flex-col gap-2 ">
-        {/** header */}
-        <PageHeader />
-
         {/** generate image form  */}
+        {/** ::TODO:: Mobile design */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="p-4 shadow-sm border  flex items-center justify-between gap-3 mt-7 max-w-[95%] rounded-md w-full mx-auto"
+            className="p-4 shadow-sm border  flex items-center justify-between gap-3 mt-7 rounded-md w-full mx-auto"
           >
             {/** input */}
             <FormField
@@ -81,7 +83,7 @@ const ImageGeneration = () => {
                   <FormControl>
                     <Input
                       className={cn(
-                        "h-10 outline-none ring-0   shadow-none ",
+                        "h-10 outline-none ring-0 min-w-40  shadow-none ",
                         errors.prompt && "border-red-500"
                       )}
                       placeholder="a flying horse.."
@@ -99,7 +101,7 @@ const ImageGeneration = () => {
               control={form.control}
               name="imageSize"
               render={({ field }) => (
-                <FormItem className="max-w-44 w-full">
+                <FormItem className="max-w-44 2xl:max-w-56 w-full">
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value.toString()}
@@ -138,7 +140,7 @@ const ImageGeneration = () => {
               control={form.control}
               name="numImages"
               render={({ field }) => (
-                <FormItem className="max-w-44 w-full ">
+                <FormItem className="max-w-44 2xl:max-w-56  w-full ">
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value.toString()}
@@ -189,7 +191,7 @@ const ImageGeneration = () => {
           </div>
         )}
 
-        {/** final result */}
+        {/** ::TODO:: Create image card and show final result */}
       </div>
     </div>
   );

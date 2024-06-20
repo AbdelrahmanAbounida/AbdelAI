@@ -9,7 +9,7 @@ const LogoDark = () => {
         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
         alt="Your Company"
       />
-      <div className="text-3xl font-bold text-white">InnovAI</div>
+      <div className="text-3xl font-bold text-white">AbdelAI</div>
     </div>
   );
 };
