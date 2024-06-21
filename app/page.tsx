@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+import PricingTables from "@/components/pricing-tables";
 
 export default function Home() {
   const [routeLoading, setrouteLoading] = useState(false);
@@ -14,9 +15,11 @@ export default function Home() {
         <h1 className="text-[60px] font-extrabold text-white">
           The Best AI Tool for
         </h1>
-        <h3 className="text-[55px] font-extrabold text-pink-600">Chatb</h3>
+        <h3 className="text-[55px] font-extrabold text-pink-600">
+          AI Services
+        </h3>
         <h4 className="text-gray-400 text-[20px]">
-          Create content using AI 10x faster.
+          Create content using AI 10x faster with AbdelAI
         </h4>
         {routeLoading ? (
           <Button className="w-64 rounded-full bg-gray-800 p-4 mt-3" disabled>
@@ -37,6 +40,11 @@ export default function Home() {
         )}
         <h4 className="text-gray-400 text-sm mt-3">No Credit card required</h4>
       </div>
+
+      {/**
+       *Pricing Tables
+       */}
+      <PricingTables />
     </main>
   );
 }

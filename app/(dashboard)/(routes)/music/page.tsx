@@ -62,7 +62,7 @@ const MusicGeneration = () => {
             />
 
             <Button
-              className="h-10 max-w-44 w-full bg-violet-600 hover:bg-violet-700"
+              className="h-10 max-w-44 w-full bg-violet-600 hover:bg-violet-700 dark:text-white"
               type="submit"
             >
               Generate

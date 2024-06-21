@@ -78,13 +78,22 @@ model TokenLimit {
 }
 
 
+model History {
+  id           String   @id @default(cuid())
+  userId      Int  @unique
+  content  String 
+  createdAt DateTime @default(now())
+}
+
 // :TODO:: handle stripe modals 
 
 model UserSubscription{
   id           String   @id @default(cuid())
   userId      Int  @unique
-  stripeCustomerId Int @unique 
-
+  stripeCustomerId String @unique
+  stripeSubscriptionId String @unique
+  stripePriceId String  
+  stripeEndDate DateTime? 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
