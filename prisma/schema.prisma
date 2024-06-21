@@ -16,6 +16,7 @@ model User {
   hashedPassword String?
   emailVerified DateTime?
   image         String?
+  bio           String?
   Session       Session[]
   Account       Account?
   totalTokens   Int @default(35) // u need 33 to try all services
@@ -71,7 +72,7 @@ model VerificationToken {
 // track token usage 
 model TokenLimit {
   id      Int      @id @default(autoincrement())
-  count   Int 
+  count   Int   @default(35)
   userId Int @unique 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,10 +80,11 @@ model TokenLimit {
 
 
 model History {
-  id           String   @id @default(cuid())
-  userId      Int  @unique
+  id           Int   @id @default(autoincrement())
+  userId      Int  // @map("user_id")
   content  String 
   createdAt DateTime @default(now())
+  @@index([userId])
 }
 
 // :TODO:: handle stripe modals 

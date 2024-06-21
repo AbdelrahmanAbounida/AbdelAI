@@ -26,6 +26,7 @@ interface ModifiedUser extends Omit<DefaultSession["user"], "id"> {
   name?: PrismaUser["name"];
   email?: PrismaUser["email"];
   image: PrismaUser["image"];
+  bio: PrismaUser["bio"];
 }
 
 declare module "next-auth" {

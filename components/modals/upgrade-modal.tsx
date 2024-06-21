@@ -1,25 +1,27 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { SidebarItems } from "@/constants/nav";
 import { Icons } from "@/constants/icons";
 import { useTheme } from "next-themes";
-import { CheckIcon } from "lucide-react";
-import UpgradeButton from "../upgrade-button";
+import { CheckIcon, Zap } from "lucide-react";
 import { usePayment } from "@/hooks/usePayment";
+import { Button } from "../ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 const UpgradeModal = () => {
   const { theme } = useTheme();
+  const [routeLodaing, setrouteLodaing] = useState(false);
   const { paymentModalOpen, setPaymentModal } = usePayment();
+  const router = useRouter();
 
   return (
     <Dialog
@@ -80,7 +82,25 @@ const UpgradeModal = () => {
 
         <DialogFooter>
           <div className="h-10 w-full">
-            <UpgradeButton />
+            {routeLodaing ? (
+              <Button disabled className="bg-gray-300 w-full mt-3">
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  setrouteLodaing(true);
+                  router.push(`/settings?tab=Billing`);
+                  setPaymentModal(false);
+                  setrouteLodaing(false);
+                }}
+                className="hover:opacity-100 dark:text-white opacity-95 w-full h-full mt-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+              >
+                Upgrade
+                <Zap className="ml-2 h-4 w-4" />
+              </Button>
+            )}
           </div>
         </DialogFooter>
       </DialogContent>

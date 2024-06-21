@@ -1,13 +1,25 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import React from "react";
+import React, { useEffect } from "react";
 import { SettingsSidebarNav } from "../../_components/settings/settings-sidebar-nav";
 import { SettingsSidebarNavItems } from "@/constants/settings";
 import { useSettings } from "@/hooks/useSettings";
 import { SettingsPages } from "../../_components/settings/all-pages";
+import { useSearchParams } from "next/navigation";
 
 const Settings = () => {
-  const { currentActiveTab } = useSettings();
+  const { currentActiveTab, setCurrentActiveTab } = useSettings();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  useEffect(() => {
+    const act = SettingsSidebarNavItems.find((item) =>
+      item.title.includes(tab!)
+    );
+    if (act) {
+      setCurrentActiveTab(act);
+    }
+  }, [tab]);
 
   return (
     <div className="hidden space-y-6 p-10 pb-16 md:block">
