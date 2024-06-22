@@ -18,6 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { toast } from "sonner";
+import { updateUser } from "@/actions/user/update-user";
+import { useRouter } from "next/navigation";
+import LoadingButton from "../loading-button";
+import { useEffect, useState } from "react";
+import { usePrismaUser } from "@/hooks/useCurrentPrismaUser";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const profileFormSchema = z.object({
   username: z
@@ -32,30 +39,70 @@ const profileFormSchema = z.object({
   bio: z.string().max(160).min(4),
 });
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 // This can come from your database or API.
 
 function ProfileForm() {
   const { user: currentuser } = useCurrentUser();
+  const { data: prismaUser, isLoading } = usePrismaUser(currentuser?.email!);
+
+  const [updateLoading, setupdateLoading] = useState(false);
+  const router = useRouter();
   const defaultValues: Partial<ProfileFormValues> = {
-    bio: currentuser?.bio!,
+    bio: prismaUser?.bio!,
     email: currentuser?.email,
+    username: prismaUser?.username!,
   };
+  const [formValues, setFormValues] =
+    useState<Partial<ProfileFormValues>>(defaultValues);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    ...formValues,
     mode: "onChange",
   });
 
-  function onSubmit(data: ProfileFormValues) {}
+  async function onSubmit(data: ProfileFormValues) {
+    try {
+      setupdateLoading(true);
+      const res = await updateUser(data);
+      if (res?.error) {
+        toast.error(res?.details);
+      } else {
+        toast.success("Profile updated successfully");
+        router.refresh();
+      }
+    } catch (error) {
+      console.log({ error });
+      toast.error("Something went wrong");
+    } finally {
+      setupdateLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!isLoading) {
+      setFormValues({
+        bio: prismaUser?.bio!,
+        email: currentuser?.email,
+        username: prismaUser?.username!,
+      });
+    }
+  }, [isLoading, prismaUser]);
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
+          defaultValue={prismaUser?.username}
           control={form.control}
           name="username"
+          disabled={updateLoading}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
@@ -87,8 +134,10 @@ function ProfileForm() {
           )}
         />
         <FormField
+          defaultValue={prismaUser?.bio}
           control={form.control}
           name="bio"
+          disabled={updateLoading}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>
@@ -105,14 +154,31 @@ function ProfileForm() {
           )}
         />
 
-        <Button
-          className="bg-violet-700 hover:bg-violet-600 text-white"
-          type="submit"
-        >
-          Update profile
-        </Button>
+        {updateLoading ? (
+          <LoadingButton />
+        ) : (
+          <Button
+            className="bg-violet-700 hover:bg-violet-600 text-white"
+            type="submit"
+          >
+            Update profile
+          </Button>
+        )}
       </form>
     </Form>
   );
 }
 export default ProfileForm;
+
+const LoadingSkeleton = () => (
+  <div className="space-y-8">
+    {[1, 2, 3].map((item, index) => (
+      <div key={index} className="flex flex-col spacy-y-4 gap-1">
+        <Skeleton className="w-[90px] h-4" />
+        <Skeleton className="w-full h-12" />
+        <Skeleton className="w-3/4 h-5" />
+      </div>
+    ))}
+    <Skeleton className="w-1/4 h-10" />
+  </div>
+);

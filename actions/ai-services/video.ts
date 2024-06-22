@@ -38,18 +38,6 @@ export const generateVideo = async ({
     }
     console.log({ userLimit });
 
-    // generate video with replicate
-    // const model = new Replicate({
-    //   model:
-    //
-    //   apiKey: process.env.REPLICATE_API_KEY,
-    //   input: {
-    //
-    //   },
-    // });
-
-    // const res = await model.invoke(prompt);
-
     const replicate = new Replicate({
       auth: process.env.REPLICATE_API_KEY,
     });
@@ -60,7 +48,7 @@ export const generateVideo = async ({
       input: {
         fps: 24,
         model: "xl",
-        width: 1024,
+        width: 576,
         height: 576,
         prompt: prompt,
         batch_size: 1,
@@ -75,7 +63,6 @@ export const generateVideo = async ({
     });
 
     // update token usage
-    console.log(userLimit - VIDEO_TOKEN_USAGE);
     await prismadb.tokenLimit.update({
       where: {
         userId,

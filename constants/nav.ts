@@ -72,5 +72,6 @@ export const SidebarItems: SideNavItemProps[] = [
     link: "/settings",
     bgColor: "",
     darkBgColor: "#1a1a1a",
+    description: "Manage your account settings and set e-mail preferences.",
   },
 ];
