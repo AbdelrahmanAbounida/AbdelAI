@@ -6,7 +6,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
 
-// ::TODO:: Stream text generation
+// for streaming response use /api/chat endpoint
 export const generateText = async ({
   prompt,
 }: {

@@ -7,7 +7,8 @@ import { ChatOpenAI } from "@langchain/openai";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
 
-// ::TODO:: Stream code generation
+// for streaming response use /api/code endpoint
+
 export const generateCode = async ({
   prompt,
 }: {

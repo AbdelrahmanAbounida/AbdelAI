@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const Logo = () => {
+const Logo = ({ withTitle = true }: { withTitle?: boolean }) => {
   return (
     <Link
       href="/"
@@ -11,9 +11,12 @@ const Logo = () => {
         width={50}
         className=""
         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-        alt="Your Company"
+        alt="abdelai"
       />
-      <div className="text-2xl font-bold text-indigo-600">AbdelAI</div>
+
+      {withTitle && (
+        <div className="text-2xl font-bold text-indigo-600">AbdelAI</div>
+      )}
     </Link>
   );
 };

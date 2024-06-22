@@ -20,6 +20,7 @@ import { generateImage } from "@/actions/ai-services/image";
 import LoadingButton from "../../_components/loading-button";
 import ImageCard from "../../_components/image-card";
 import { Loader2 } from "lucide-react";
+import EmptyState from "../../_components/empty-state";
 
 const ImageGeneration = () => {
   const [generatedImages, setgeneratedImages] = useState<string[]>([]);
@@ -177,7 +178,7 @@ const ImageGeneration = () => {
         </Form>
 
         {/** empty result */}
-        {generatedImages?.length == 0 && !generateLoading && (
+        {/* {generatedImages?.length == 0 && !generateLoading && (
           <div className="h-full items-center justify-center mt-4 flex flex-col">
             <img src="/assets/empty-img.png" alt="empty image" />
 
@@ -189,7 +190,11 @@ const ImageGeneration = () => {
           <div className="flex items-center justify-center h-52">
             <Loader2 className="animate-spin w-8 h-8" color="#7C3AED" />
           </div>
-        )}
+        )} */}
+        <EmptyState
+          show={generatedImages?.length == 0}
+          generateLoading={generateLoading}
+        />
 
         {/** ::TODO:: Create image card and show final result */}
         <div className="w-full px-2 flex flex-wrap gap-4 items-center h-full justify-center">
