@@ -170,6 +170,7 @@ export function ConversationBlock({ isCode }: { isCode: boolean }) {
           <EmptyState
             show={messages?.length == 0}
             generateLoading={chatEndpointIsLoading}
+            title="No Answer Generated"
           />
 
           {messages.length > 0 ? (

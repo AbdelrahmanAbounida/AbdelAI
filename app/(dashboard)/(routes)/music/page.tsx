@@ -4,17 +4,22 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-
+import ReactAudioPlayer from "react-audio-player";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import LoadingButton from "../../_components/loading-button";
+import EmptyState from "../../_components/empty-state";
+import { toast } from "sonner";
+import { generateMusic } from "@/actions/ai-services/music";
 
 const MusicFormSchema = z.object({
   prompt: z.string().min(1, { message: "message is required" }),
 });
 
 const MusicGeneration = () => {
-  const [generatedAnswer, setgeneratedAnswer] = useState<string>("");
+  const [generatedMusic, setgeneratedMusic] = useState<string>("");
+  const [musicLoading, setmusicLoading] = useState(false);
 
   // form
   const form = useForm<z.infer<typeof MusicFormSchema>>({
@@ -22,11 +27,22 @@ const MusicGeneration = () => {
   });
   const errors = form.formState.errors;
 
-  function onSubmit(data: z.infer<typeof MusicFormSchema>) {
-    console.log({ data });
-
-    {
-      /** ::TODO :: handle Music generation and update db table  */
+  async function onSubmit(data: z.infer<typeof MusicFormSchema>) {
+    try {
+      setmusicLoading(true);
+      setgeneratedMusic("");
+      const resp = await generateMusic(data);
+      if (resp?.error) {
+        toast.error(resp?.details);
+      } else {
+        console.log({ resp });
+        setgeneratedMusic(resp?.details?.audio);
+      }
+    } catch (error) {
+      console.log({ error });
+      toast.error("Something went wrong");
+    } finally {
+      setmusicLoading(false);
     }
   }
 
@@ -61,27 +77,33 @@ const MusicGeneration = () => {
               )}
             />
 
-            <Button
-              className="h-10 max-w-44 w-full bg-violet-600 hover:bg-violet-700 dark:text-white"
-              type="submit"
-            >
-              Generate
-            </Button>
+            {musicLoading ? (
+              <LoadingButton />
+            ) : (
+              <Button
+                className="h-10 max-w-44 w-full bg-violet-600 hover:bg-violet-700 dark:text-white"
+                type="submit"
+              >
+                Generate
+              </Button>
+            )}
           </form>
         </Form>
 
-        <div className="">{/** generate button */}</div>
+        <EmptyState
+          show={generatedMusic.length == 0}
+          generateLoading={musicLoading}
+          title={"No Music generated"}
+        />
 
-        {/** empty result */}
-        {!generatedAnswer && (
-          <div className="h-full items-center justify-center mt-4 flex flex-col">
-            <img src="/assets/empty-img.png" alt="empty answer" />
-
-            <span className="text-slate-600 text-md">No Music generated</span>
-          </div>
+        {generatedMusic && (
+          <ReactAudioPlayer
+            className="w-full mt-3"
+            src={generatedMusic}
+            autoPlay
+            controls
+          />
         )}
-
-        {/** ::TODO:: Create Music card and show final result */}
       </div>
     </div>
   );

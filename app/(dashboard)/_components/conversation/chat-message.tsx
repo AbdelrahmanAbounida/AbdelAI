@@ -7,7 +7,9 @@ import "highlight.js/styles/github.css";
 
 function ChatMessageBubble(props: { message: Message; isCode: boolean }) {
   const colorClassName =
-    props.message.role === "user" ? "bg-violet-50" : "bg-slate-50 text-black";
+    props.message.role === "user"
+      ? "bg-violet-50 dark:bg-slate-900 dark:text-white"
+      : "bg-slate-50 dark:bg-transparent dark:text-white text-black";
   const alignmentClassName =
     props.message.role === "user" ? "ml-auto" : "mr-auto";
   const prefix =
@@ -35,7 +37,7 @@ function ChatMessageBubble(props: { message: Message; isCode: boolean }) {
       >
         <div className="mr-2">{prefix}</div>
 
-        <Highlight className=" h-full w-full bg-slate-50">
+        <Highlight className=" h-full w-full bg-trasnparent dark:bg-slate-900 dark:text-white">
           {transformCodeBlock(props.message.content)}
         </Highlight>
       </div>

@@ -2,8 +2,8 @@
 
 import { auth } from "@/auth";
 import { getUserTokens } from "../token-limit/get-tokens";
-import { FREE_PLAN_INIT_TOKENS, VIDEO_TOKEN_USAGE } from "@/constants";
-import { Replicate } from "@langchain/community/llms/replicate";
+import { VIDEO_TOKEN_USAGE } from "@/constants";
+import Replicate from "replicate";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
 
@@ -41,25 +41,38 @@ export const generateVideo = async ({
     // generate video with replicate
     // const model = new Replicate({
     //   model:
-    //     "anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351",
+    //
     //   apiKey: process.env.REPLICATE_API_KEY,
     //   input: {
-    //     fps: 24,
-    //     model: "xl",
-    //     width: 1024,
-    //     height: 576,
-    //     Prompt: prompt,
-    //     batch_size: 1,
-    //     num_frames: 24,
-    //     init_weight: 0.5,
-    //     guidance_scale: 17.5,
-    //     // "negative_prompt": "very blue, dust, noisy, washed out, ugly, distorted, broken",
-    //     remove_watermark: false,
-    //     num_inference_steps: 50,
+    //
     //   },
     // });
 
     // const res = await model.invoke(prompt);
+
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_KEY,
+    });
+    const model =
+      "anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351";
+
+    const res = await replicate.run(model, {
+      input: {
+        fps: 24,
+        model: "xl",
+        width: 1024,
+        height: 576,
+        prompt: prompt,
+        batch_size: 1,
+        num_frames: 24,
+        init_weight: 0.5,
+        guidance_scale: 17.5,
+        negative_prompt:
+          "very blue, dust, noisy, washed out, ugly, distorted, broken",
+        remove_watermark: false,
+        num_inference_steps: 50,
+      },
+    });
 
     // update token usage
     console.log(userLimit - VIDEO_TOKEN_USAGE);
@@ -79,7 +92,7 @@ export const generateVideo = async ({
         content: `Generated video with prompt:  ${prompt.slice(0, 11)}...`,
       },
     });
-    return { error: false, details: "res" };
+    return { error: false, details: res };
   } catch (error) {
     console.log({ error });
     return { error: true, details: "something went wrong" };

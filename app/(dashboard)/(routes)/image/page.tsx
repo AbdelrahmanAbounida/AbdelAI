@@ -178,25 +178,12 @@ const ImageGeneration = () => {
         </Form>
 
         {/** empty result */}
-        {/* {generatedImages?.length == 0 && !generateLoading && (
-          <div className="h-full items-center justify-center mt-4 flex flex-col">
-            <img src="/assets/empty-img.png" alt="empty image" />
-
-            <span className="text-slate-600 text-md">No images generated</span>
-          </div>
-        )}
-
-        {generateLoading && (
-          <div className="flex items-center justify-center h-52">
-            <Loader2 className="animate-spin w-8 h-8" color="#7C3AED" />
-          </div>
-        )} */}
         <EmptyState
           show={generatedImages?.length == 0}
           generateLoading={generateLoading}
+          title={"No images generated"}
         />
 
-        {/** ::TODO:: Create image card and show final result */}
         <div className="w-full px-2 flex flex-wrap gap-4 items-center h-full justify-center">
           {generatedImages?.map((image, index) => (
             <ImageCard key={index} image={image} />

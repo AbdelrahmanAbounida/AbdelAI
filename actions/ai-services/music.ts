@@ -3,9 +3,10 @@
 import { auth } from "@/auth";
 import { getUserTokens } from "../token-limit/get-tokens";
 import { FREE_PLAN_INIT_TOKENS, MUSIC_TOKEN_USAGE } from "@/constants";
-import { Replicate } from "@langchain/community/llms/replicate";
+// import { Replicate } from "@langchain/community/llms/replicate";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
+import Replicate from "replicate";
 
 export const generateMusic = async ({
   prompt,
@@ -35,12 +36,15 @@ export const generateMusic = async ({
       };
     }
 
-    // generate music with replicate
-    const model = new Replicate({
-      model:
-        "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
-      apiKey: process.env.REPLICATE_API_KEY,
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_KEY,
+    });
+    const model =
+      "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05";
+
+    const res = await replicate.run(model, {
       input: {
+        prompt,
         alpha: 0.5,
         prompt_a: prompt,
         prompt_b: "90's rap",
@@ -49,9 +53,6 @@ export const generateMusic = async ({
         num_inference_steps: 50,
       },
     });
-
-    const res = await model.invoke(prompt);
-
     // update token usage
 
     await prismadb.tokenLimit.update({
