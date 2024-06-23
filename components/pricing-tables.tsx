@@ -33,7 +33,7 @@ const PricingTables = () => {
               ))}
             </ul>
             <a
-              href="#"
+              href="/dashboard"
               className="absolute bottom-5 w-full mx-auto max-w-[85%] text-white bg-violet-800 hover:bg-violet-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-violet-900"
             >
               Get started
@@ -59,7 +59,7 @@ const PricingTables = () => {
               ))}
             </ul>
             <a
-              href="#"
+              href="/settings?tab=Billing"
               className="text-white absolute bottom-5 w-full mx-auto max-w-[85%] bg-violet-800 hover:bg-violet-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-violet-900"
             >
               Upgrade
@@ -86,7 +86,7 @@ const PricingTables = () => {
               ))}
             </ul>
             <a
-              href="#"
+              href="/settings?tab=Billing"
               className="text-white absolute bottom-5 w-full mx-auto max-w-[85%] bg-violet-800 hover:bg-violet-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-violet-900"
             >
               Upgrade
