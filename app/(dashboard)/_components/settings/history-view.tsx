@@ -41,4 +41,6 @@ const HistoryPage = () => {
 export default HistoryPage;
 
 const HistorySkeleton = () =>
-  [1, 2, 3, 5].map((item) => <Skeleton className="w-full h-12" />);
+  [1, 2, 3, 5].map((item, index) => (
+    <Skeleton key={index} className="w-full h-12" />
+  ));
