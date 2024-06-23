@@ -12,17 +12,25 @@
 ## About
 a SAAS AI Platform for text, image, video, music and code generation
 
+
+# Screenshots 
+<img src="public/assets/abdel_homePage.png" alt="abdel_homePage">
+<img src="public/assets/abdel_dashboard.png" alt="abdel_dashboard">
+<img src="public/assets/abdel_settings.png" alt="abdel_settings">
+
+
 ## Technologies Used
 
 - **Frontend Framework**: Next.js - server actions
 - **Styling**: Tailwind CSS
 - **ORM**: Prisma ORM
-- **Database**: MySQL
+- **Database**: MySQL 
 - **Authentication**: Auth.js
 - **Data Fetching and Query**: SWR
 - **State Management**: Zustand
 - **UI Components**: Shadcn
 - **Payment**: Stripe
+- - **AI**: OpenAI, Replicate 
 
 ## Environment Variables
 
