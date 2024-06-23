@@ -25,11 +25,6 @@ export async function POST(req: Request) {
     const name = session.metadata?.name;
     const plan = session.metadata?.plan as BillingPlanType;
 
-    console.log({
-      userId,
-      plan,
-    });
-
     if (!userId) {
       return NextResponse.json(
         { error: "webhook error missing  userId" },
@@ -72,17 +67,17 @@ export async function POST(req: Request) {
       // update user subscription
       const newWssub = await prismadb.userSubscription.upsert({
         where: {
-          userId: parseInt(userId),
+          userId: userId,
         },
         create: {
-          userId: parseInt(userId),
+          userId: userId,
           stripeCustomerId: subscription.customer as string,
           stripeSubscriptionId: subscription.id,
           stripePriceId: subscription.items.data[0].price.id,
           stripeEndDate: new Date(subscription.current_period_end * 1000),
         },
         update: {
-          userId: parseInt(userId),
+          userId: userId,
           stripeCustomerId: subscription.customer as string,
           stripeSubscriptionId: subscription.id,
           stripePriceId: subscription.items.data[0].price.id,
@@ -93,10 +88,10 @@ export async function POST(req: Request) {
       // update user tokens
       await prismadb.tokenLimit.upsert({
         where: {
-          userId: parseInt(userId),
+          userId: userId,
         },
         create: {
-          userId: parseInt(userId),
+          userId: userId,
           count: FREE_PLAN_INIT_TOKENS + BillingPlans[plan].tokens,
         },
         update: {
@@ -108,7 +103,7 @@ export async function POST(req: Request) {
       // update user plan and total tokens
       const newUser = await prismadb.user.update({
         where: {
-          id: parseInt(userId),
+          id: userId,
         },
         data: {
           plan,
@@ -133,17 +128,17 @@ export async function POST(req: Request) {
         // Upsert user subscription details
         const newWssub = await prismadb.userSubscription.upsert({
           where: {
-            userId: parseInt(userId),
+            userId: userId,
           },
           create: {
-            userId: parseInt(userId),
+            userId: userId,
             stripeCustomerId: subscription.customer as string,
             stripeSubscriptionId: subscription.id,
             stripePriceId: subscription.items.data[0].price.id,
             stripeEndDate: new Date(subscription.current_period_end * 1000),
           },
           update: {
-            userId: parseInt(userId),
+            userId: userId,
             stripeCustomerId: subscription.customer as string,
             stripeSubscriptionId: subscription.id,
             stripePriceId: subscription.items.data[0].price.id,
@@ -154,10 +149,10 @@ export async function POST(req: Request) {
         // Update user tokens
         await prismadb.tokenLimit.upsert({
           where: {
-            userId: parseInt(userId),
+            userId: userId,
           },
           create: {
-            userId: parseInt(userId),
+            userId: userId,
             count: FREE_PLAN_INIT_TOKENS,
           },
           update: {
@@ -170,7 +165,7 @@ export async function POST(req: Request) {
         // Update user plan
         const newUser = await prismadb.user.update({
           where: {
-            id: parseInt(userId),
+            id: userId,
           },
           data: {
             plan,

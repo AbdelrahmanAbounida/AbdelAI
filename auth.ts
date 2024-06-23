@@ -63,11 +63,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   events: {
     async linkAccount({ user }) {
-      if (!isNumeric(user?.id!))
-        throw new Error("linkaccount: id should be a number");
+      // if (!isNumeric(user?.id!))
+      //   throw new Error("linkaccount: id should be a number");
 
       await prismadb.user.update({
-        where: { id: Number(user.id) },
+        // where: { id: Number(user.id) },
+        where: { id: user.id },
         data: {
           emailVerified: new Date(),
         },
@@ -79,10 +80,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider !== "credentials") return true;
 
       // check if email is verified
-      if (!isNumeric(user?.id!))
-        throw new Error("linkaccount: id should be a number");
+      // if (!isNumeric(user?.id!))
+      //   throw new Error("linkaccount: id should be a number");
 
-      const resp = await getUserById({ id: Number(user.id) });
+      const resp = await getUserById({ id: user?.id! });
       const existuser = resp?.details && !resp.error;
       console.log({ existuser });
       if (!existuser) return false;
@@ -92,10 +93,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, session, account }) {
       if (!token.sub) return token;
 
-      if (!isNumeric(token.sub))
-        throw new Error("jwt: token should be a number");
+      // if (!isNumeric(token.sub))
+      //   throw new Error("jwt: token should be a number");
 
-      const resp = await getUserById({ id: Number(token.sub) });
+      const resp = await getUserById({ id: token.sub }); // Number(token.sub)
       const user = resp?.details;
       if (resp?.error || !user) return token;
 

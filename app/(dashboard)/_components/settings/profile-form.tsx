@@ -185,7 +185,7 @@ function ProfileForm() {
                 <Input {...field} value={currentuser?.email!} disabled />
               </FormControl>
               <FormDescription>
-                You can't modify this email manually
+                {"You can't modify this email manually"}
               </FormDescription>
               <FormMessage />
             </FormItem>

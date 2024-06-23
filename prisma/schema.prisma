@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -15,7 +15,7 @@ enum PlanEnum {
 
 
 model User {
-  id      Int      @id @default(autoincrement())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   username      String?         @unique
   email         String         @unique
@@ -37,17 +37,17 @@ model User {
 }
 
 model Account {
-  id      Int      @id @default(autoincrement())
-  userId                   Int  @unique
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  userId                   String  @db.ObjectId @unique
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
+  refresh_token            String? @db.String
+  access_token             String? @db.String
   expires_at               Int?
   token_type               String?
   scope                    String?
-  id_token                 String? @db.Text
+  id_token                 String? @db.String
   session_state            String?
   refresh_token_expires_in Int?
   user                     User?   @relation(fields: [userId], references: [id])
@@ -56,13 +56,12 @@ model Account {
   updatedAt DateTime @updatedAt
  
   @@unique([provider, providerAccountId])
-  @@index([userId])
 }
  
  model Session {
-  id      Int      @id @default(autoincrement())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       Int
+  userId       String @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
  
@@ -73,7 +72,7 @@ model Account {
 }
 
 model VerificationToken {
-  id      Int      @id @default(autoincrement())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String
   expires    DateTime
@@ -83,17 +82,17 @@ model VerificationToken {
 
 // track token usage 
 model TokenLimit {
-  id      Int      @id @default(autoincrement())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   count   Int   @default(35)
-  userId Int @unique 
+  userId String @unique 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 
 model History {
-  id           Int   @id @default(autoincrement())
-  userId      Int  // @map("user_id")
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  // @map("user_id")
   content  String 
   createdAt DateTime @default(now())
   @@index([userId])
@@ -102,8 +101,8 @@ model History {
 // :TODO:: handle stripe modals 
 
 model UserSubscription{
-  id           String   @id @default(cuid())
-  userId      Int  @unique
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @unique
   stripeCustomerId String @unique
   stripeSubscriptionId String @unique
   stripePriceId String  
@@ -111,3 +110,118 @@ model UserSubscription{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+// enum PlanEnum {
+//   FREE
+//   BASIC
+//   PRO
+// }
+
+
+// model User {
+//   id      Int      @id @default(autoincrement())
+//   name          String?
+//   username      String?         @unique
+//   email         String         @unique
+//   hashedPassword String?
+//   emailVerified DateTime?
+//   image         String?
+//   bio           String?
+//   Session       Session[]
+//   Account       Account?
+//   plan          PlanEnum  @default(FREE)
+//   totalTokens   Int @default(35) // u need 33 to try all services
+
+//   // ai 
+//   openai_api_key    String? 
+//   replicate_api_key   String?
+  
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Account {
+//   id      Int      @id @default(autoincrement())
+//   userId                   Int  @unique
+//   type                     String
+//   provider                 String
+//   providerAccountId        String
+//   refresh_token            String? @db.Text
+//   access_token             String? @db.Text
+//   expires_at               Int?
+//   token_type               String?
+//   scope                    String?
+//   id_token                 String? @db.Text
+//   session_state            String?
+//   refresh_token_expires_in Int?
+//   user                     User?   @relation(fields: [userId], references: [id])
+ 
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+ 
+//   @@unique([provider, providerAccountId])
+//   @@index([userId])
+// }
+ 
+//  model Session {
+//   id      Int      @id @default(autoincrement())
+//   sessionToken String   @unique
+//   userId       Int
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id])
+ 
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+ 
+//   @@index([userId])
+// }
+
+// model VerificationToken {
+//   id      Int      @id @default(autoincrement())
+//   identifier String
+//   token      String
+//   expires    DateTime
+ 
+//   @@unique([identifier, token])
+// }
+
+// // track token usage 
+// model TokenLimit {
+//   id      Int      @id @default(autoincrement())
+//   count   Int   @default(35)
+//   userId Int @unique 
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+
+// model History {
+//   id           Int   @id @default(autoincrement())
+//   userId      Int  // @map("user_id")
+//   content  String 
+//   createdAt DateTime @default(now())
+//   @@index([userId])
+// }
+
+// // :TODO:: handle stripe modals 
+
+// model UserSubscription{
+//   id           String   @id @default(cuid())
+//   userId      Int  @unique
+//   stripeCustomerId String @unique
+//   stripeSubscriptionId String @unique
+//   stripePriceId String  
+//   stripeEndDate DateTime? 
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

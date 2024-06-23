@@ -7,7 +7,7 @@ const DAY_IN_MS = 24 * 60 * 60 * 1000;
 export const validateSubscription = async ({
   userId,
 }: {
-  userId: number;
+  userId: string;
 }): Promise<Boolean> => {
   const user_sub = await prismadb.userSubscription.findFirst({
     where: {

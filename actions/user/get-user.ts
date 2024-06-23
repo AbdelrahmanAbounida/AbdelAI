@@ -24,7 +24,7 @@ export const getUserByEmail = async ({
 export const getUserById = async ({
   id,
 }: {
-  id: number;
+  id: string;
 }): Promise<ActionResponse> => {
   try {
     const user = await prismadb.user.findUnique({
