@@ -1,10 +1,16 @@
 import { getUserHistory } from "@/actions/history/get-history";
 import { getUserByEmail } from "@/actions/user/get-user";
 import useSWR from "swr";
+import { useCurrentUser } from "./useCurrentUser";
 
-export const fetcher = async (email: string) => {
+export const fetcher = async (email?: string) => {
   try {
-    const res = await getUserByEmail({ email });
+    let email2 = email;
+    if (!email) {
+      const { user } = useCurrentUser();
+      email2 = user?.email!;
+    }
+    const res = await getUserByEmail({ email: email2! });
     if (res?.error) {
       throw new Error(res?.details);
     }
@@ -14,7 +20,7 @@ export const fetcher = async (email: string) => {
   }
 };
 
-export const usePrismaUser = (email: string) => {
+export const usePrismaUser = (email?: string) => {
   const { data, isLoading, error } = useSWR("getPrismaUser", () =>
     fetcher(email)
   );

@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Zap } from "lucide-react";
 import { usePayment } from "@/hooks/usePayment";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const UpgradeButton = () => {
   const { setPaymentModal } = usePayment();

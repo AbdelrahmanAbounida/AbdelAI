@@ -7,6 +7,7 @@ import { FREE_PLAN_INIT_TOKENS, MUSIC_TOKEN_USAGE } from "@/constants";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
 import Replicate from "replicate";
+import { getUserById } from "../user/get-user";
 
 export const generateMusic = async ({
   prompt,
@@ -19,6 +20,19 @@ export const generateMusic = async ({
 
     if (!userId) {
       return { error: true, details: "unauthorized" };
+    }
+    const user_res = await getUserById({ id: userId });
+    const user = user_res?.details;
+    if (user_res?.error || !user_res?.details) {
+      return { error: true, details: "unauthorized" };
+    }
+
+    if (!user.replicate_api_key) {
+      return {
+        error: true,
+        details:
+          "Please update your profile replicate_api_key first in settings",
+      };
     }
 
     // check token limit
@@ -37,7 +51,7 @@ export const generateMusic = async ({
     }
 
     const replicate = new Replicate({
-      auth: process.env.REPLICATE_API_KEY,
+      auth: user.replicate_api_key, // process.env.REPLICATE_API_KEY,
     });
     const model =
       "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05";

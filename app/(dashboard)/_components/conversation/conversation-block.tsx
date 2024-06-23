@@ -19,6 +19,10 @@ import { addHistory } from "@/actions/history/add-history";
 import { updateTokenLimit } from "@/actions/token-limit/update-tokens";
 import { CODE_TOKEN_USAGE, TEXT_TOKEN_USAGE } from "@/constants";
 import { CheckTokenLimit } from "@/actions/token-limit/get-tokens";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { usePrismaUser } from "@/hooks/useCurrentPrismaUser";
+import { User } from "@prisma/client";
+import { StreamData } from "ai";
 
 const ConversationFormSchema = z.object({
   prompt: z.string().min(1, { message: "message is required" }),
@@ -26,12 +30,18 @@ const ConversationFormSchema = z.object({
 
 export function ConversationBlock({ isCode }: { isCode: boolean }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
+  const { data: prismaUser, isLoading }: { data: User; isLoading: boolean } =
+    usePrismaUser();
 
   // Form
   const form = useForm<z.infer<typeof ConversationFormSchema>>({
     resolver: zodResolver(ConversationFormSchema),
   });
   const errors = form.formState.errors;
+  // const data = new StreamData();
+  // data.append({
+  //   asd:""
+  // })
 
   const {
     messages,
@@ -40,8 +50,12 @@ export function ConversationBlock({ isCode }: { isCode: boolean }) {
     handleSubmit,
     isLoading: chatEndpointIsLoading,
     setMessages,
+    data,
   } = useChat({
     api: isCode ? "/api/code" : "api/chat",
+    body: {
+      openai_api_key: prismaUser?.openai_api_key,
+    },
     onResponse(response: any) {
       if (response.status == 200) {
         // update token usage
@@ -49,8 +63,9 @@ export function ConversationBlock({ isCode }: { isCode: boolean }) {
       }
     },
     streamMode: "text",
-    onError: (e: any) => {
-      toast(e?.message?.error);
+    onError: (e: Error) => {
+      const err = JSON.parse(e.message);
+      toast.error(err?.error); // e?.message?.error ||
     },
   });
 
@@ -174,7 +189,7 @@ export function ConversationBlock({ isCode }: { isCode: boolean }) {
           />
 
           {messages.length > 0 ? (
-            isCode ? (
+            !isCode ? (
               [...messages].reverse().map((m, i) => {
                 return (
                   <ChatMessageBubble

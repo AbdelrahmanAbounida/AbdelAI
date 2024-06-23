@@ -1,17 +1,35 @@
 "use server";
 
-export const checkSubscription = async () => {};
+import { prismadb } from "@/lib/db";
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+export const validateSubscription = async ({
+  userId,
+}: {
+  userId: number;
+}): Promise<Boolean> => {
+  const user_sub = await prismadb.userSubscription.findFirst({
+    where: {
+      userId,
+    },
+  });
+
+  if (!user_sub) {
+    return false;
+  }
+
+  const isValid =
+    user_sub.stripePriceId &&
+    user_sub.stripeEndDate?.getTime()! + DAY_IN_MS > Date.now();
+  return !!isValid;
+};
 
 // ::TODO:: check sub
-// ::TODO:: get current token usage
 // ::TODO:: show upgrade in sidebar if user not pro
-// complete video generation
-// do code same as text and see how to show it
-// check music gneration
-// see how to edit settings
 // see josh for stripe
-// handle striepe on main page
-// finalize other settings
+// handle stripe on main page
+// show uprade on sidebar for free users
 // deploy
 
 // work on gedanken webhook

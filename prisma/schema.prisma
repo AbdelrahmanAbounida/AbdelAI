@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PlanEnum {
+  FREE
+  BASIC
+  PRO
+}
+
 
 model User {
   id      Int      @id @default(autoincrement())
@@ -19,7 +25,13 @@ model User {
   bio           String?
   Session       Session[]
   Account       Account?
+  plan          PlanEnum  @default(FREE)
   totalTokens   Int @default(35) // u need 33 to try all services
+
+  // ai 
+  openai_api_key    String? 
+  replicate_api_key   String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

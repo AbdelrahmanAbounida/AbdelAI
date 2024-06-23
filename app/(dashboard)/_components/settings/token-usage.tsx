@@ -12,8 +12,9 @@ const TokenUsage = () => {
   return (
     <div className="text-xl">
       you have{" "}
-      <span className="font-bold text-2xl text-violet-500">{data?.count}</span>{" "}
-      in your pocket
+      <span className="font-bold text-2xl text-violet-500">{data?.count}</span>
+      {"  "}
+      tokens in your pocket
     </div>
   );
 };

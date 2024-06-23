@@ -35,8 +35,18 @@ const profileFormSchema = z.object({
     .max(30, {
       message: "Username must not be longer than 30 characters.",
     }),
+  openai_api_key: z.string().nullable().optional(),
+  replicate_api_key: z.string().nullable().optional(),
   email: z.string().email().optional(),
-  bio: z.string().max(160).min(4),
+  // bio: z
+  //   .string()
+  //   .max(160, {
+  //     message: "Bio must not be longer than 160 characters.",
+  //   })
+  //   .min(4, {
+  //     message: "Bio must be at least 4 characters.",
+  //   })
+  //   .optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -50,9 +60,11 @@ function ProfileForm() {
   const [updateLoading, setupdateLoading] = useState(false);
   const router = useRouter();
   const defaultValues: Partial<ProfileFormValues> = {
-    bio: prismaUser?.bio!,
+    // bio: prismaUser?.bio!,
     email: currentuser?.email,
     username: prismaUser?.username!,
+    openai_api_key: prismaUser?.openai_api_key!,
+    replicate_api_key: prismaUser?.replicate_api_key!,
   };
   const [formValues, setFormValues] =
     useState<Partial<ProfileFormValues>>(defaultValues);
@@ -66,7 +78,7 @@ function ProfileForm() {
   async function onSubmit(data: ProfileFormValues) {
     try {
       setupdateLoading(true);
-      const res = await updateUser(data);
+      const res = await updateUser({ ...data, email: currentuser?.email });
       if (res?.error) {
         toast.error(res?.details);
       } else {
@@ -84,9 +96,11 @@ function ProfileForm() {
   useEffect(() => {
     if (!isLoading) {
       setFormValues({
-        bio: prismaUser?.bio!,
+        // bio: prismaUser?.bio!,
         email: currentuser?.email,
         username: prismaUser?.username!,
+        openai_api_key: prismaUser?.openai_api_key!,
+        replicate_api_key: prismaUser?.replicate_api_key!,
       });
     }
   }, [isLoading, prismaUser]);
@@ -94,7 +108,7 @@ function ProfileForm() {
   if (isLoading) {
     return <LoadingSkeleton />;
   }
-
+  console.log({ prismaUser });
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -109,20 +123,64 @@ function ProfileForm() {
               <FormControl>
                 <Input placeholder="@abdelai" {...field} />
               </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/** openai key  */}
+        <FormField
+          defaultValue={prismaUser?.openai_api_key}
+          control={form.control}
+          name="openai_api_key"
+          disabled={updateLoading}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>OpenAI API Key</FormLabel>
+              <FormControl>
+                <Input placeholder="sk-***" {...field} value={field.value!} />
+              </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                This is openai API Key that will be used in chat and code
+                generation
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/** replicate apikey  */}
+        <FormField
+          defaultValue={prismaUser?.replicate_api_key}
+          control={form.control}
+          name="replicate_api_key"
+          disabled={updateLoading}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>replicate API Key</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="r8_71Z********"
+                  {...field}
+                  value={field.value!}
+                />
+              </FormControl>
+              <FormDescription>
+                This is replicate API Key that will be used in image,music and
+                video generation
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-gray-500">Email</FormLabel>
               <FormControl>
                 <Input {...field} value={currentuser?.email!} disabled />
               </FormControl>
@@ -133,7 +191,7 @@ function ProfileForm() {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           defaultValue={prismaUser?.bio}
           control={form.control}
           name="bio"
@@ -148,11 +206,10 @@ function ProfileForm() {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>update your bio</FormDescription>
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {updateLoading ? (
           <LoadingButton />

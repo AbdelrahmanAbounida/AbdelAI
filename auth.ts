@@ -27,6 +27,10 @@ interface ModifiedUser extends Omit<DefaultSession["user"], "id"> {
   email?: PrismaUser["email"];
   image: PrismaUser["image"];
   bio: PrismaUser["bio"];
+  plan: PrismaUser["plan"];
+  tokens: PrismaUser["totalTokens"];
+  openai_api_key: PrismaUser["openai_api_key"];
+  replicate_api_key: PrismaUser["replicate_api_key"];
 }
 
 declare module "next-auth" {
@@ -97,12 +101,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       token.isauth = !!(account?.provider !== "credentials");
       token.id = user.id;
+      token.bio = user.bio;
+      token.username = user.usernmae;
+      token.plan = user.plan;
+      token.tokens = user.totalTokens;
+
       return token;
     },
     session({ session, token }: any) {
       if (session.user) {
         session.user.isauth = token.isauth;
         session.user.id = token.id;
+        session.user.bio = token.bio;
+        session.user.username = token.username;
+        session.user.plan = token.plan;
+        session.user.tokens = token.tokens;
       }
       return session;
     },

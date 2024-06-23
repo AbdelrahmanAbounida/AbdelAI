@@ -11,6 +11,8 @@ const Settings = () => {
   const { currentActiveTab, setCurrentActiveTab } = useSettings();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  const paymentIntent = searchParams.get("payment_intent");
+  const redirect_status = searchParams.get("redirect_status");
 
   useEffect(() => {
     const act = SettingsSidebarNavItems.find((item) =>
@@ -20,6 +22,41 @@ const Settings = () => {
       setCurrentActiveTab(act);
     }
   }, [tab]);
+
+  if (paymentIntent && redirect_status) {
+    return (
+      <div className=" h-screen">
+        <div className="p-6  md:mx-auto">
+          <svg
+            viewBox="0 0 24 24"
+            className="text-green-600 w-16 h-16 mx-auto my-6"
+          >
+            <path
+              fill="currentColor"
+              d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+            ></path>
+          </svg>
+          <div className="text-center">
+            <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
+              Payment Done!
+            </h3>
+            <p className="text-gray-600 my-2">
+              Thank you for completing your secure online payment.
+            </p>
+            <p> Have a great day! </p>
+            <div className="py-10 text-center">
+              <a
+                href="/settings?tab=Billing"
+                className="px-12 bg-violet-600 hover:bg-violet-500 rounded-m text-white font-semibold py-3"
+              >
+                GO BACK
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="hidden space-y-6 p-10 pb-16 md:block">

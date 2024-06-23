@@ -35,10 +35,17 @@ export const generateText = async ({
       };
     }
 
+    if (!session?.user?.openai_api_key) {
+      return {
+        error: true,
+        details: "Please update your profile openai_api_key first in settings",
+      };
+    }
+
     // generate text with openai
     const model = new ChatOpenAI({
       temperature: 0.9,
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: session?.user?.openai_api_key,
     });
 
     const res = await model.invoke([

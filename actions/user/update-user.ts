@@ -1,34 +1,19 @@
 "use server";
 
-import { ProfileFormValues } from "@/app/(dashboard)/_components/settings/profile-form";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
-import { z } from "zod";
+import { User } from "@prisma/client";
 
 export const updateUser = async ({
   email,
-  username,
-  bio,
-}: ProfileFormValues): Promise<ActionResponse> => {
+  ...data
+}: Partial<User>): Promise<ActionResponse> => {
   try {
-    const user = await prismadb.user.findUnique({
+    const updatedUser = await prismadb.user.update({
       where: {
         email,
       },
-    });
-
-    if (!user) {
-      return { error: true, details: "unauthorized" };
-    }
-
-    const updatedUser = await prismadb.user.update({
-      where: {
-        id: user?.id,
-      },
-      data: {
-        bio,
-        username,
-      },
+      data,
     });
     return { error: false, details: updatedUser };
   } catch (error) {

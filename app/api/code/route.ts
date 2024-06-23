@@ -29,9 +29,20 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
+    const openai_api_key = body.openai_api_key;
+    if (!openai_api_key) {
+      return NextResponse.json(
+        {
+          error: "Please update your profile openai_api_key first in settings",
+        },
+        { status: 402 }
+      );
+    }
+
     const model = new ChatOpenAI({
       temperature: 0.8,
       modelName: "gpt-3.5-turbo-1106",
+      apiKey: openai_api_key,
     });
 
     const outputParser = new HttpResponseOutputParser();

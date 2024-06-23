@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 const UpgradeModal = () => {
   const { theme } = useTheme();
   const [routeLodaing, setrouteLodaing] = useState(false);
-  const { paymentModalOpen, setPaymentModal } = usePayment();
+  const { paymentModalOpen, setPaymentModal, setMultistepModal } = usePayment();
   const router = useRouter();
 
   return (
@@ -91,8 +91,9 @@ const UpgradeModal = () => {
               <Button
                 onClick={() => {
                   setrouteLodaing(true);
-                  router.push(`/settings?tab=Billing`);
+                  // router.push(`/settings?tab=Billing`);
                   setPaymentModal(false);
+                  setMultistepModal(true);
                   setrouteLodaing(false);
                 }}
                 className="hover:opacity-100 dark:text-white opacity-95 w-full h-full mt-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"

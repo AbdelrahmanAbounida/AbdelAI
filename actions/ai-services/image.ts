@@ -8,6 +8,7 @@ import { z } from "zod";
 import { prismadb } from "@/lib/db";
 import { ActionResponse } from "@/schemas/common";
 import { FREE_TABLE } from "@/constants/pricing";
+import { getUserById } from "../user/get-user";
 
 export const generateImage = async ({
   imageSize,
@@ -19,6 +20,12 @@ export const generateImage = async ({
     const userId = session?.user?.id;
 
     if (!userId) {
+      return { error: true, details: "unauthorized" };
+    }
+
+    const user_res = await getUserById({ id: userId });
+    const user = user_res?.details;
+    if (user_res?.error || !user_res?.details) {
       return { error: true, details: "unauthorized" };
     }
 
@@ -37,19 +44,25 @@ export const generateImage = async ({
       };
     }
 
+    if (!user.replicate_api_key) {
+      return {
+        error: true,
+        details:
+          "Please update your profile replicate_api_key first in settings",
+      };
+    }
+
     // generate image with replicate
     const model = new Replicate({
       model:
         "stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
       // "bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f",
-      apiKey: process.env.REPLICATE_API_KEY,
+      apiKey: user.replicate_api_key, // process.env.REPLICATE_API_KEY,
       input: {
         width: imageSize,
         height: imageSize,
         prompt,
         num_outputs: numImages,
-        guidance_scale: 0,
-        negative_prompt: "worst quality, low quality",
         num_inference_steps: 4,
         cfg: 1,
       },

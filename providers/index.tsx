@@ -12,7 +12,7 @@ export const AllProviders = async ({
   return (
     <AuthProvider>
       <ThemeProvider defaultTheme="light" attribute="class">
-        <Toaster />
+        <Toaster richColors />
         <ModalProvider />
         {children}
       </ThemeProvider>

@@ -31,6 +31,15 @@ export const getUserById = async ({
       where: {
         id,
       },
+      // select: {
+      //   id: true,
+      //   bio: true,
+      //   username: true,
+      //   plan: true,
+      //   email: true,
+      //   image: true,
+      //   name: true,
+      // },
     });
     return { error: false, details: user };
   } catch (error) {
