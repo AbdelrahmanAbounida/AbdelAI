@@ -1,3 +1,4 @@
+import { Sparkle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -7,13 +8,7 @@ const Logo = ({ withTitle = true }: { withTitle?: boolean }) => {
       href="/"
       className="flex items-center gap-2 mx-auto w-full  justify-center"
     >
-      <img
-        width={50}
-        className=""
-        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-        alt="abdelai"
-      />
-
+      <Sparkle className="h-5 w-5 text-indigo-600" />
       {withTitle && (
         <div className="text-2xl font-bold text-indigo-600">AbdelAI</div>
       )}
